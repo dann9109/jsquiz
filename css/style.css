@@ -3,9 +3,23 @@
     font-family: sans-serif;
 }
 
+button {
+
+    background-color: rgb(15, 98, 146);
+    color: #fff;
+    border-radius: 25px;
+    font-size: 20px;
+    margin: 10px;
+
+}
+
 /* Global Classes */
 .hide {
     display: none;
+}
+
+.show {
+    display: block;
 }
 
 .text-center {
@@ -19,6 +33,11 @@
 
 .justify-between {
     justify-content: space-between;
+
+}
+
+.margin-top {
+    margin-top: 100px;
 }
 
 /* Custom Style */
@@ -33,4 +52,13 @@ header h3 {
     font-style: italic;
     color: #999;
 
+}
+
+.auto-margin {
+    display: block;
+    margin: 0 auto;
+}
+
+button:hover {
+    transform: scale(1.2);
 }

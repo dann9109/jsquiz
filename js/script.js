@@ -9,6 +9,9 @@ var timeOutput = document.querySelector('#clock')
 // Select the choice div
 var choicesDiv = document.querySelector('.choices')
 var scoreWrap = document.querySelector('.score-wrap')
+var saveScoreBtn = document.getElementById("save-score");
+var inputUserScore = document.getElementById("initial-input")
+// var userScore = null;
 
 
 // Check if the current question index is equal to the total number of questions
@@ -31,23 +34,19 @@ function checkAnswer(eventObj) {
     if (el.tagName === 'BUTTON') {
         // Store the user's answer
         var userAnswer = el.textContent;
-
         var answer = document.querySelector('.answer')
 
+        console.log('userAnswer is', userAnswer);
+        console.log('asnwer is', answer);
 
         // Determine if the user's answer (button text) is equal to the current question's correct answer
         if (userAnswer === currentQuestion.correctAnswer) {
             answer.textContent = 'Correct'
-
             answer.classList.add('show')
-
-
         } else {
             answer.textContent = 'Wrong'
-
-            answer.classList.add('show')
-
-
+            // answer.classList.add('show')
+            answer.classList.toggle("hide");
             time -= 15;
         }
         setTimeout(function () {
@@ -125,6 +124,7 @@ function startGame() {
     questionWrap.classList.remove('hide')
     timeOutput.classList.remove('hide')
 
+
 }
 
 
@@ -157,7 +157,32 @@ function displayQuestion() {
 choicesDiv.addEventListener('click', checkAnswer);
 
 startBtn.addEventListener('click', startGame);
+saveScoreBtn.addEventListener('click', function () {
+    var userName = inputUserScore.value
 
+    // you alrday have the score value
+    console.log(userName)
+    // create an object, i.e. think curly braces
+    // save the object to local storage using localstorage.setItem();
+    // then just do a document.location.replace("/highscore.html");
+
+
+    // when you click on the save score button, you want to grab the score( i.e. time variable) and input field value 
+    // and save them to local storage. https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
+
+    var scoreData = {
+        username: userName,
+        score: score
+    };
+
+    // Save the scoreData object to local storage
+    localStorage.setItem('scoreData', JSON.stringify(scoreData));
+
+    // Redirect to highscores.html
+    window.location.replace("./highscores.html");
+
+
+})
 
 
 

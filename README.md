@@ -1,7 +1,7 @@
 ## JavaScript Quiz Web App
 This is a JavaScript Quiz Web App that allows users to test their knowledge of JavaScript fundamentals. The app presents multiple-choice questions and tracks the user's score. It also provides a timer to add a time constraint to the quiz.
 
-
+![Quiz](images/jsquiz.PNG)
 
 ### Features
 Multiple-choice questions: The app presents a series of multiple-choice questions related to JavaScript.

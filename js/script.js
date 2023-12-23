@@ -11,13 +11,13 @@ var choicesDiv = document.querySelector('.choices')
 var scoreWrap = document.querySelector('.score-wrap')
 var saveScoreBtn = document.getElementById("save-score");
 var inputUserScore = document.getElementById("initial-input")
-// var userScore = null;
-
+var messageParagraph = document.querySelector('#gameover-text');
+var clicked = false;
 
 // Check if the current question index is equal to the total number of questions
-if (currentQuestionIndex === questions.length) {
-    console.log('End the game');
-}
+// if (currentQuestionIndex === questions.length) {
+//     // console.log('End the game');
+// }
 
 
 
@@ -25,7 +25,10 @@ if (currentQuestionIndex === questions.length) {
 // Function that checks if the button pressed contains the correct answer
 function checkAnswer(eventObj) {
     eventObj.stopPropagation();
-
+    // After clicking do not allow another click until the next question has been displayed
+    if (clicked) {
+        return;
+    }
     // Grab the targeted element that was clicked
     var el = eventObj.target;
     var currentQuestion = questions[currentQuestionIndex];
@@ -36,8 +39,8 @@ function checkAnswer(eventObj) {
         var userAnswer = el.textContent;
         var answer = document.querySelector('.answer')
 
-        console.log('userAnswer is', userAnswer);
-        console.log('asnwer is', answer);
+        // console.log('userAnswer is', userAnswer);
+        // console.log('asnwer is', answer);
 
         // Determine if the user's answer (button text) is equal to the current question's correct answer
         if (userAnswer === currentQuestion.correctAnswer) {
@@ -47,8 +50,16 @@ function checkAnswer(eventObj) {
             answer.textContent = 'Wrong'
             // answer.classList.add('show')
             answer.classList.toggle("hide");
-            time -= 15;
+            // if (time -= 15 < 0) {
+            //     time = 0
+            // } else {
+            //     time -= 15;
+            // }
+            time = (time - 15 < 0) ? 0 : time - 15;
         }
+
+        clicked = true;
+
         setTimeout(function () {
             answer.classList.remove('show');
 
@@ -57,19 +68,17 @@ function checkAnswer(eventObj) {
 
 
             if (currentQuestionIndex === questions.length) {
+                console.log('end')
                 endGame();
             } else {
+                console.log('next')
                 displayQuestion();
-            }
-        }, 300)
-    }
-    // increase currentQuestionIndex by 1 to move to the next question
-    currentQuestionIndex++;
-    // if the currentQuestionIndex is equal to the amount of questions in the questions array then call end game
 
-    if (currentQuestionIndex === questions.length) {
-        endGame();
+            }
+            clicked = false;
+        }, 700);
     }
+
 }
 
 
@@ -81,9 +90,10 @@ function endGame() {
     clearInterval(timer);
 
 
-    var messageParagraph = document.querySelector('#endgame');
+
     messageParagraph.textContent = 'Game Over';
-    messageParagraph.style.display = 'initial';
+    messageParagraph.classList.remove('hide')
+    // messageParagraph.style.display = 'initial';
     // reset time back to 60 sec
 
 
@@ -95,18 +105,21 @@ function endGame() {
 
     scoreWrap.classList.remove('hide')
 
-    time = 60;
 
-    currentQuestionIndex = 0;
 }
 
 // Function to start the game
 function startGame() {
 
+    time = 60;
+
+    currentQuestionIndex = 0;
+
     timeOutput.textContent = 'Time: ' + time;
 
     timer = setInterval(function () {
-        time--;
+        time = (time - 1) < 0 ? 0 : time - 1;
+
         timeOutput.textContent = 'Time Left: ' + time;
 
         // Check if time is up and end the game
@@ -118,7 +131,7 @@ function startGame() {
     }, 1000);
 
 
-
+    messageParagraph.classList.add('hide')
     displayQuestion();
     startBtn.classList.add('hide')
     questionWrap.classList.remove('hide')
@@ -150,30 +163,19 @@ function displayQuestion() {
 }
 
 
+function saveScore() {
+    var initialUserName = inputUserScore.value
 
 
 
-// Set a click listener on the parent div of all the choice buttons
-choicesDiv.addEventListener('click', checkAnswer);
+    var rawData = localStorage.getItem('scoreData');
+    var scoreData = JSON.parse(rawData) || [];
 
-startBtn.addEventListener('click', startGame);
-saveScoreBtn.addEventListener('click', function () {
-    var userName = inputUserScore.value
-
-    // you alrday have the score value
-    console.log(userName)
-    // create an object, i.e. think curly braces
-    // save the object to local storage using localstorage.setItem();
-    // then just do a document.location.replace("/highscore.html");
-
-
-    // when you click on the save score button, you want to grab the score( i.e. time variable) and input field value 
-    // and save them to local storage. https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
-
-    var scoreData = {
-        username: userName,
-        score: score
-    };
+    scoreData.push({
+        userName: initialUserName,
+        // use time variable as the score
+        score: time
+    });
 
     // Save the scoreData object to local storage
     localStorage.setItem('scoreData', JSON.stringify(scoreData));
@@ -181,8 +183,25 @@ saveScoreBtn.addEventListener('click', function () {
     // Redirect to highscores.html
     window.location.replace("./highscores.html");
 
+}
 
-})
+
+// Set a click listener on the parent div of all the choice buttons
+choicesDiv.addEventListener('click', checkAnswer);
+
+startBtn.addEventListener('click', startGame);
+
+saveScoreBtn.addEventListener('click', saveScore);
+
+
+
+
+
+
+
+
+
+
 
 
 

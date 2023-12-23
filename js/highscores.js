@@ -1,3 +1,8 @@
+
+var backBtn = document.querySelector('#backbtn');
+backBtn.textContent = 'Back'
+
+
 function outputHighscores() {
     var highScoreOutput = document.querySelector('.highscores-output');
 
@@ -26,6 +31,16 @@ function outputHighscores() {
         highScoreOutput.append(div);
     }
 };
+
+
+function goBack() {
+
+
+    window.location.replace('./index.html')
+}
+
+
+backBtn.addEventListener('click', goBack)
 
 
 

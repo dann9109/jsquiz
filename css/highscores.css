@@ -1,0 +1,13 @@
+.backbtn {
+    background-color: rgb(15, 98, 146);
+    color: #fff;
+    border-radius: 25px;
+    font-size: 20px;
+    margin: 10px;
+
+}
+
+
+.backbtn:hover {
+    transform: scale(1.2);
+}
